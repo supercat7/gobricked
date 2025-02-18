@@ -1,2 +1,2 @@
-module post-exploitation-framework
-go 1.19
+module gobricked
+go 1.22

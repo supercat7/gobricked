@@ -1,0 +1,82 @@
+# Go build output
+/build/
+*.exe
+*.out
+*.o
+*.a
+*.so
+*.dylib
+
+# Go workspace files
+# Do NOT ignore go.mod and go.sum
+# These files are essential for dependency management in Go projects.
+# go.mod
+# go.sum
+
+# Go IDE/editor files
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+*.pid
+
+# C/C++ build output
+/build/
+*.exe
+*.out
+*.o
+*.a
+
+# Web related (Node.js, etc.)
+node_modules/
+dist/
+*.log
+*.tsbuildinfo
+*.js.map
+yarn.lock
+package-lock.json
+
+# Docker
+.docker/
+
+# Vim swap files
+*.swp
+
+# Go coverage files
+*.coverprofile
+
+# Test result files
+*.test
+*.out
+*.coverprofile
+
+# SSH Keys (for security)
+*.pem
+*.key
+
+# Agent Config Files (if sensitive, like hardcoded credentials)
+configs/agent-config.yaml
+
+# SQL database files (like SQLite DB files)
+# These are typically environment-specific and not versioned.
+*.sqlite3
+*.db
+
+# Webpack, build, or package files
+npm-debug.log
+yarn-error.log
+
+# Configuration files for IDE
+/.idea/
+*.iml
+
