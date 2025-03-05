@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
+	"gobricked/pkg/server/art"
 	"gobricked/pkg/server/shell"
 	"strings"
 )
 
 func main() {
+	fmt.Printf("%s\n", art.BANNER)
 	for {
 		var arg string = ""
 		fmt.Printf("gobricked> ")
