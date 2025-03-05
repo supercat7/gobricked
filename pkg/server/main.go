@@ -10,6 +10,6 @@ func main() {
 	fmt.Printf("%s\n", art.GOBRICKED_BANNER)
 	fmt.Println("Initializing TCP Server...")
 	fmt.Println("Loading SQL Database...")
-	fmt.Println("Loading Web Components...")
+	fmt.Println("Loading Web Components and HTTP Server...")
 	shell.Shell()
 }

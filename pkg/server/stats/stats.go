@@ -1,5 +1,0 @@
-package stats
-
-func ListAgents() {
-
-}
