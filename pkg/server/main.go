@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	fmt.Printf("%s\n", art.BANNER)
+	fmt.Printf("%s\n", art.GOBRICKED_BANNER)
 	for {
 		var arg string = ""
 		fmt.Printf("gobricked> ")
