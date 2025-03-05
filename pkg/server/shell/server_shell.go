@@ -20,11 +20,11 @@ func ParseArgs() []string {
 	return inputArr
 }
 
-func ParseCommands(input []string) {
+func ParseCommands(input []string, shellCommands map[string][]string) {
 	if input[0] == "help" {
-		commands.ServerHelp(input)
+		commands.Help(input, shellCommands)
 	} else if input[0] == "exit" {
-		os.Exit(0)
+		commands.ServerExit()
 	} else if input[0] == "" {
 		//
 	} else {
@@ -32,9 +32,11 @@ func ParseCommands(input []string) {
 	}
 }
 
-func Shell() {
+func Shell(shellCommands map[string][]string) {
 	for {
 		input := ParseArgs()
-		ParseCommands(input)
+		ParseCommands(input, shellCommands)
 	}
 }
+
+// make this shell an object so I can pass in args as needed and spawn a new shell?
