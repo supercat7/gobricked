@@ -1,4 +1,2 @@
 build: \
-  go build -o build/server cmd/server/main.go
-agent: \
-  gcc -o build/agent cmd/agent/main.c
+  go build -o build/server src/server/main.go src/server/shell.go

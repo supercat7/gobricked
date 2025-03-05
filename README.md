@@ -5,6 +5,6 @@ A Full post-exploitation framework and C2 Server
 - C
 - Web (idk)
 # About
-This
+Version: 0.0
 # Installation
 # Quick Usage
