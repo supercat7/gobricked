@@ -22,7 +22,7 @@ func ParseArgs() []string {
 
 func ParseCommands(input []string) {
 	if input[0] == "help" {
-		commands.Help(input)
+		commands.ServerHelp(input)
 	} else if input[0] == "exit" {
 		os.Exit(0)
 	} else if input[0] == "" {

@@ -1,1 +1,5 @@
 package stats
+
+func ListAgents() {
+
+}
