@@ -2,7 +2,6 @@ package commands
 
 import (
 	"fmt"
-	"gobricked/pkg/server/shell"
 	"os"
 )
 
@@ -13,7 +12,7 @@ var SERVER_SHELL_COMMANDS = map[string][]string{
 	"agent":  {"Agent actions", "Options: agent <pick|info|list> <AGENT ID>\n-> leave <AGENT_ID> empty for <list> option"},
 }
 
-func (s *shell.Shell) HelpCommand(args []string) {
+func HelpCommand(args []string) {
 	if len(args) == 0 {
 		keys := []string{"help", "exit", "server", "agent"}
 		for i := 0; i < len(keys); i++ {
@@ -31,6 +30,7 @@ func (s *shell.Shell) HelpCommand(args []string) {
 }
 
 func ExitCommand(args []string) {
+	fmt.Printf("Shutting down Server instance...\n")
 	os.Exit(0)
 }
 
