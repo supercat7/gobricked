@@ -14,6 +14,8 @@ func main() {
 	fmt.Println("Loading Web Components and HTTP Server...")
 
 	baseShell := shell.NewShell(art.GOBRICKED_PROMPT, commands.SERVER_SHELL_COMMANDS)
-	baseShell.RegisterCommand("exit", commands.ExitCommand)
+	baseShell.RegisterCommand("exit", commands.ServerExitCommand)
+	baseShell.RegisterCommand("server", commands.ServerServerCommand)
+	baseShell.RegisterCommand("agent", commands.ServerAgentCommand)
 	baseShell.Start()
 }
