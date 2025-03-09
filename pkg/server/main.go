@@ -12,5 +12,8 @@ func main() {
 	fmt.Println("Initializing TCP Server...")
 	fmt.Println("Loading SQL Database...")
 	fmt.Println("Loading Web Components and HTTP Server...")
-	shell.Shell(commands.SERVER_SHELL_COMMANDS)
+
+	s := shell.NewShell("gobricked> ")
+	s.AddCommand("help", commands.HelpCommand)
+	s.Start()
 }

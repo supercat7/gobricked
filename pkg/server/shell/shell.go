@@ -3,42 +3,43 @@ package shell
 import (
 	"bufio"
 	"fmt"
-	"gobricked/pkg/server/commands"
 	"os"
 	"strings"
 )
 
-var shell interface {
-
-} 
-
-func ParseArgs() []string {
-	fmt.Printf("gobricked> ")
-
-	scanner := bufio.NewScanner(os.Stdin)
-	scanner.Scan()
-
-	input := scanner.Text()
-	inputArr := strings.Fields(input)
-
-	return inputArr
+type Shell struct {
+	Prompt   string
+	Commands map[string]func([]string)
 }
 
-func ParseCommands(input []string, shellCommands map[string][]string) {
-	if input[0] == "help" {
-		commands.Help(input, shellCommands)
-	} else if input[0] == "exit" {
-		commands.ServerExit()
-	} else if input[0] == "" {
-		//
-	} else {
-		fmt.Println("No such command exists use command 'help' for more info")
+func (s *Shell) AddCommand(cmd string, handler func([]string)) {
+	s.Commands[cmd] = handler
+}
+
+func NewShell(prompt string) *Shell {
+	return &Shell{
+		Prompt:   prompt,
+		Commands: make(map[string]func([]string)),
 	}
 }
 
-func Shell(shellCommands map[string][]string) {
+func (s *Shell) Start() {
 	for {
-		input := ParseArgs()
-		ParseCommands(input, shellCommands)
+		fmt.Printf(s.Prompt)
+
+		scanner := bufio.NewScanner(os.Stdin)
+		scanner.Scan()
+
+		input := scanner.Text()
+		inputArr := strings.Fields(input)
+
+		if len(inputArr) > 0 {
+			cmd, args := inputArr[0], inputArr[1:]
+			if handler, exists := s.Commands[cmd]; exists {
+				handler(args)
+			} else {
+				fmt.Println("Command not found: ", cmd)
+			}
+		}
 	}
 }
