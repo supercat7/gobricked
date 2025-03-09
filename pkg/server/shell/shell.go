@@ -13,7 +13,7 @@ type Shell struct {
 	CmdDesc  map[string][]string
 }
 
-func (s *Shell) AddCommand(cmd string, handler func([]string)) {
+func (s *Shell) RegisterCommand(cmd string, handler func([]string)) {
 	s.Commands[cmd] = handler
 }
 
@@ -37,8 +37,15 @@ func (s *Shell) Start() {
 
 		if len(inputArr) > 0 {
 			cmd, args := inputArr[0], inputArr[1:]
+			if cmd == "help" {
+				HelpCommand(args, s.CmdDesc)
+				continue
+			}
 			if handler, exists := s.Commands[cmd]; exists {
 				handler(args)
+				if cmd == "exit" {
+					break
+				}
 			} else {
 				fmt.Println("Command not found: ", cmd)
 			}
