@@ -13,7 +13,8 @@ func main() {
 	fmt.Println("Loading SQL Database...")
 	fmt.Println("Loading Web Components and HTTP Server...")
 
-	s := shell.NewShell("gobricked> ")
-	s.AddCommand("help", commands.HelpCommand)
-	s.Start()
+	baseShell := shell.NewShell("gobricked> ", commands.SERVER_SHELL_COMMANDS)
+	baseShell.AddCommand("help", commands.HelpCommand)
+	baseShell.AddCommand("exit", commands.ExitCommand)
+	baseShell.Start()
 }

@@ -10,16 +10,18 @@ import (
 type Shell struct {
 	Prompt   string
 	Commands map[string]func([]string)
+	CmdDesc  map[string][]string
 }
 
 func (s *Shell) AddCommand(cmd string, handler func([]string)) {
 	s.Commands[cmd] = handler
 }
 
-func NewShell(prompt string) *Shell {
+func NewShell(prompt string, cmddesc map[string][]string) *Shell {
 	return &Shell{
 		Prompt:   prompt,
 		Commands: make(map[string]func([]string)),
+		CmdDesc:  cmddesc,
 	}
 }
 
