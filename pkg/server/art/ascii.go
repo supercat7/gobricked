@@ -1,6 +1,6 @@
 package art
 
-var GOBRICKED_BANNER string = `
+const GOBRICKED_BANNER string = `
 
   ________      ___.         .__        __              .___
  /  _____/  ____\_ |_________|__| ____ |  | __ ____   __| _/

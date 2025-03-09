@@ -8,6 +8,10 @@ import (
 	"strings"
 )
 
+var shell interface {
+
+} 
+
 func ParseArgs() []string {
 	fmt.Printf("gobricked> ")
 
@@ -38,5 +42,3 @@ func Shell(shellCommands map[string][]string) {
 		ParseCommands(input, shellCommands)
 	}
 }
-
-// make this shell an object so I can pass in args as needed and spawn a new shell?

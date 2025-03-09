@@ -1,7 +1,9 @@
 package commands
 
-import "fmt"
-
+import (
+	"os"
+	"fmt"
+)
 func Help(input []string, shellCommands map[string][]string) {
 	if len(input) == 1 {
 		ListCommands(shellCommands)
@@ -20,4 +22,15 @@ func ListCommands(commands map[string][]string) {
 		fmt.Printf("-> %s : %s\n", key, value[0])
 	}
 	fmt.Println("To get more info about a command run 'help <command>'")
+}
+
+
+var SERVER_SHELL_COMMANDS = map[string][]string{
+	"help":   {"Prints commands", "Options: help <command>	Lists more information about a command"},
+	"exit":   {"Exits gobricked", "Exits gobricked"},
+	"server": {"Server actions", "Options: server <start|info|stop> <port>\n-> leave <port> empty if you want to shutdown all server instances\n-> for option <info> you don't need to enter a port"},
+}
+
+func ServerExit() {
+	os.Exit(0)
 }
