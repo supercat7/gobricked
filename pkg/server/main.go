@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gobricked/pkg/server/art"
 	"gobricked/pkg/server/commands"
+	"gobricked/pkg/server/comms"
 	"gobricked/pkg/server/shell"
 	"gobricked/pkg/server/stats"
 )
@@ -13,6 +14,13 @@ func main() {
 
 	fmt.Println("Initalizing Server statistics and data...")
 	stats.UpTimeInit()
+
+	fmt.Println("Loading server configurations...")
+	port := "9090"
+
+	fmt.Println("Launching TCP Server on port:", port)
+	t := comms.NewTCPServer(port)
+	t.Start()
 
 	fmt.Println("Loading Database...")
 

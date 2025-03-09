@@ -6,6 +6,8 @@ import (
 	"sync"
 )
 
+var AGENT_SOCK_LIST []net.Conn
+
 type TCPServer struct {
 	Port     string
 	Listener net.Listener
@@ -42,7 +44,15 @@ func (t *TCPServer) Start() {
 			fmt.Printf("\nErr: Failed to accept client connection: %v\n", err)
 		}
 		fmt.Printf("\nConnection received from: %s\n", t.Connec.RemoteAddr())
+		AGENT_SOCK_LIST = append(AGENT_SOCK_LIST, t.Connec)
 		go HandleClientConnection(t.Connec)
+	}
+}
+
+func StopAllAgentComms() {
+	for i := 0; i < len(AGENT_SOCK_LIST); i++ {
+		fmt.Println("Closed connection to:", AGENT_SOCK_LIST[i].RemoteAddr())
+		AGENT_SOCK_LIST[i].Close()
 	}
 }
 
@@ -51,17 +61,17 @@ func (t *TCPServer) Stop() {
 	defer t.mu.Unlock()
 
 	if !t.Running {
-		fmt.Printf("\nServer is not running on port: %s\n", t.Port)
+		fmt.Println("\nServer is not running on port:", t.Port)
 		return
 	}
 
 	if t.Listener != nil {
 		t.Listener.Close()
 		t.Running = false
+		fmt.Println("Sending shutdown signal to all agents...")
+		StopAllAgentComms()
 		fmt.Println("\nClosed server on port:", t.Port)
 	} else {
 		fmt.Println("\nServer is not running on port:", t.Port)
 	}
 }
-
-func StopAllServers() {}
