@@ -2,6 +2,7 @@ package comms
 
 import (
 	"fmt"
+	"gobricked/pkg/server/art"
 	"net"
 	"sync"
 )
@@ -54,12 +55,12 @@ func (t *TCPServer) Start(quit chan struct{}) {
 			t.Connec, err = t.Listener.Accept()
 			if err != nil {
 				fmt.Printf("\nErr: Failed to accept client connection: %v\n", err)
+				fmt.Print(art.GOBRICKED_PROMPT)
 			}
-			fmt.Printf("\nConnection received from: %s\n", t.Connec.RemoteAddr())
+			fmt.Printf("\nConnection received from: %s\n\r", t.Connec.RemoteAddr())
+			fmt.Print(art.GOBRICKED_PROMPT)
 			AGENT_SOCK_LIST = append(AGENT_SOCK_LIST, t.Connec)
-			go HandleClientConnection(t.Connec)
 		}
-
 	}
 }
 

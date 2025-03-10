@@ -4,7 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 )
 
 type Shell struct {
@@ -26,8 +28,18 @@ func NewShell(prompt string, cmddesc map[string][]string) *Shell {
 }
 
 func (s *Shell) Start() {
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+
+	go func() {
+		sig := <-sigChan
+		fmt.Println("\nReceived signal:", sig)
+		fmt.Println("Exiting shell...")
+		os.Exit(0)
+	}()
+
 	for {
-		fmt.Printf(s.Prompt)
+		fmt.Print(s.Prompt)
 
 		scanner := bufio.NewScanner(os.Stdin)
 		scanner.Scan()
