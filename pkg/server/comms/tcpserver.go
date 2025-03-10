@@ -84,10 +84,10 @@ func (t *TCPServer) Stop(quit chan struct{}) {
 
 	if t.Listener != nil {
 		t.Running = false
-		fmt.Println("Sending shutdown signal to all agents...")
+		fmt.Println("\nSending shutdown signal to all agents...")
 		StopAllAgentComms()
-		fmt.Println("\nClosed server on port:", t.Port)
+		fmt.Println("Closed server on port:", t.Port)
 	} else {
-		fmt.Println("\nServer is not running on port:", t.Port)
+		fmt.Println("Server is not running on port:", t.Port)
 	}
 }
