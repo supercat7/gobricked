@@ -16,36 +16,50 @@ type TCPServer struct {
 	mu       sync.Mutex
 }
 
+var SERVERINSTANCE *TCPServer = NewTCPServer("9090")
+var SERVERCHANNEL chan struct{} = make(chan struct{})
+
 func NewTCPServer(port string) *TCPServer {
 	return &TCPServer{
 		Port: port,
 	}
 }
 
-func (t *TCPServer) Start() {
+func (t *TCPServer) Start(quit chan struct{}) {
 	t.mu.Lock()
-	defer t.mu.Unlock()
 
 	if t.Running {
 		fmt.Printf("Server already running on port: %s\n", t.Port)
+		t.mu.Unlock()
+		return
 	}
 
 	var err error
 	t.Listener, err = net.Listen("tcp", ":"+t.Port)
 	if err != nil {
 		fmt.Printf("\nErr: Failed to bind server to port: %v\n", err)
+		t.mu.Unlock()
 		return
 	}
 	t.Running = true
-	fmt.Println("\nServer started on port:", t.Port)
+
+	t.mu.Unlock()
 	for {
-		t.Connec, err = t.Listener.Accept()
-		if err != nil {
-			fmt.Printf("\nErr: Failed to accept client connection: %v\n", err)
+		select {
+		case <-quit:
+			fmt.Println("Shutting Listener...")
+			t.Listener.Close()
+			return
+		default:
+			t.Connec, err = t.Listener.Accept()
+			if err != nil {
+				fmt.Printf("\nErr: Failed to accept client connection: %v\n", err)
+			}
+			fmt.Printf("\nConnection received from: %s\n", t.Connec.RemoteAddr())
+			AGENT_SOCK_LIST = append(AGENT_SOCK_LIST, t.Connec)
+			go HandleClientConnection(t.Connec)
 		}
-		fmt.Printf("\nConnection received from: %s\n", t.Connec.RemoteAddr())
-		AGENT_SOCK_LIST = append(AGENT_SOCK_LIST, t.Connec)
-		go HandleClientConnection(t.Connec)
+
 	}
 }
 
@@ -56,17 +70,18 @@ func StopAllAgentComms() {
 	}
 }
 
-func (t *TCPServer) Stop() {
+func (t *TCPServer) Stop(quit chan struct{}) {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
 	if !t.Running {
 		fmt.Println("\nServer is not running on port:", t.Port)
+		t.mu.Unlock()
 		return
 	}
+	close(quit)
 
 	if t.Listener != nil {
-		t.Listener.Close()
 		t.Running = false
 		fmt.Println("Sending shutdown signal to all agents...")
 		StopAllAgentComms()

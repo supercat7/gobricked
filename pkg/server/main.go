@@ -16,11 +16,9 @@ func main() {
 	stats.UpTimeInit()
 
 	fmt.Println("Loading server configurations...")
-	port := "9090"
 
-	fmt.Println("Launching TCP Server on port:", port)
-	t := comms.NewTCPServer(port)
-	t.Start()
+	fmt.Println("Launching TCP Server on port:", "9090")
+	go comms.SERVERINSTANCE.Start(comms.SERVERCHANNEL)
 
 	fmt.Println("Loading Database...")
 

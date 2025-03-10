@@ -3,6 +3,7 @@ package commands
 import (
 	"fmt"
 	"gobricked/pkg/server/art"
+	"gobricked/pkg/server/comms"
 	"gobricked/pkg/server/shell"
 	"gobricked/pkg/server/stats"
 	"gobricked/pkg/server/util"
@@ -17,7 +18,7 @@ var SERVER_SHELL_COMMANDS = map[string][]string{
 }
 
 func ServerExitCommand(args []string) {
-
+	comms.SERVERINSTANCE.Stop(comms.SERVERCHANNEL)
 }
 
 func ServerServerCommand(args []string) {
