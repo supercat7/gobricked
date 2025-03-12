@@ -3,10 +3,9 @@ package shell
 import (
 	"bufio"
 	"fmt"
+	"gobricked/client/comms"
 	"os"
-	"os/signal"
 	"strings"
-	"syscall"
 )
 
 type Shell struct {
@@ -29,15 +28,6 @@ func NewShell(prompt string, cmddesc map[string][]string) *Shell {
 
 func (s *Shell) Start() {
 	var cmd string
-	var sigtermCounter int = 0
-	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
-
-	go func() {
-		<-sigChan
-		sigtermCounter += 1
-	}()
-
 	for {
 		fmt.Print(s.Prompt)
 
@@ -50,7 +40,12 @@ func (s *Shell) Start() {
 		if len(inputArr) > 0 {
 			cmd = inputArr[0]
 			args := inputArr[1:]
-
+			if cmd != "auth" || cmd != "help" || cmd != "exit" {
+				if comms.AUTHENTICATED == false {
+					fmt.Println("You must first connect and authenticate to a server")
+					continue
+				}
+			}
 			if cmd == "help" {
 				HelpCommand(args, s.CmdDesc)
 				continue

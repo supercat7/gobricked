@@ -2,12 +2,9 @@ package comms
 
 import (
 	"fmt"
-	"gobricked/pkg/art"
 	"net"
 	"sync"
 )
-
-var AGENT_SOCK_LIST []net.Conn
 
 type Listener struct {
 	Port     string
@@ -17,15 +14,12 @@ type Listener struct {
 	mu       sync.Mutex
 }
 
-var SERVERINSTANCE *Listener = NewTCPListener("9090")
-var SERVERCHANNEL chan struct{} = make(chan struct{})
-
 type Server interface {
 	Start()
 	Stop()
 }
 
-func NewTCPListener(port string) *Listener {
+func NewListener(port string) *Listener {
 	return &Listener{
 		Port: port,
 	}
@@ -60,21 +54,20 @@ func (t *Listener) Start(quit chan struct{}) {
 			t.Connec, err = t.Listener.Accept()
 			if err != nil {
 				fmt.Printf("\nErr: Failed to accept client connection: %v\n", err)
-				fmt.Print(art.GOBRICKED_PROMPT)
 			}
 			fmt.Printf("\nConnection received from: %s\n\r", t.Connec.RemoteAddr())
-			fmt.Print(art.GOBRICKED_PROMPT)
-			AGENT_SOCK_LIST = append(AGENT_SOCK_LIST, t.Connec)
+			fmt.Println("Attempting to authenticate client...")
+			go authClient(t.Connec)
 		}
 	}
 }
 
-func stopAllAgentComms() {
-	for i := 0; i < len(AGENT_SOCK_LIST); i++ {
-		fmt.Println("Closed connection to:", AGENT_SOCK_LIST[i].RemoteAddr())
-		AGENT_SOCK_LIST[i].Close()
-	}
-}
+// func stopAllAgentComms() {
+// 	for i := 0; i < len(AGENT_SOCK_LIST); i++ {
+// 		fmt.Println("Closed connection to:", AGENT_SOCK_LIST[i].RemoteAddr())
+// 		AGENT_SOCK_LIST[i].Close()
+// 	}
+// }
 
 func (t *Listener) Stop(quit chan struct{}) {
 	t.mu.Lock()
@@ -89,8 +82,7 @@ func (t *Listener) Stop(quit chan struct{}) {
 
 	if t.Listener != nil {
 		t.Running = false
-		fmt.Println("\nSending shutdown signal to all agents...")
-		stopAllAgentComms()
+		//stopAllAgentComms()
 		fmt.Println("Closed server on port:", t.Port)
 	} else {
 		fmt.Println("Server is not running on port:", t.Port)

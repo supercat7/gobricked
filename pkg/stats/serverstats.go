@@ -1,9 +1,12 @@
 package stats
 
 import (
-	"fmt"
 	"time"
 )
+
+type ServerStats struct {
+	uptime time.Duration
+}
 
 var startTime time.Time
 
@@ -18,7 +21,9 @@ func UpTime() time.Duration {
 	return time.Since(startTime)
 }
 
-func DisplayServerStats() {
+func GetServerStats() ServerStats {
 	uptime := UpTime()
-	fmt.Println("Server Uptime:", uptime.Truncate(time.Second))
+	return ServerStats{
+		uptime: uptime.Truncate(time.Second),
+	}
 }

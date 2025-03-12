@@ -1,32 +1,38 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"gobricked/pkg/art"
-	"gobricked/pkg/commands"
 	"gobricked/pkg/comms"
-	"gobricked/pkg/shell"
 	"gobricked/pkg/stats"
+	"gobricked/pkg/util"
+	"os"
 )
 
 func main() {
-	fmt.Printf("%s\n", art.GOBRICKED_BANNER)
+	var configPath string
+	flag.StringVar(&configPath, "config", "", "Server Yaml config path (required)")
+	flag.Parse()
+
+	if configPath == "" {
+		fmt.Println("Error: the config file path is required")
+		flag.Usage()
+		os.Exit(1)
+	}
 
 	fmt.Println("Initalizing Server statistics and data...")
 	stats.UpTimeInit()
 
 	fmt.Println("Loading server configurations...")
+	config, err := util.LoadServerConfig(configPath)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(":", config)
+	var port string = util.GetServerPort(config)
 
-	fmt.Println("Launching TCP Server on port:", "9090")
-	go comms.SERVERINSTANCE.Start(comms.SERVERCHANNEL)
-
-	fmt.Println("Loading Database...")
-
-	fmt.Println("Loading Web Components and HTTP Server...")
-
-	baseShell := shell.NewShell(art.GOBRICKED_PROMPT, commands.SERVER_SHELL_COMMANDS)
-	baseShell.RegisterCommand("exit", commands.ServerExitCommand)
-	baseShell.RegisterCommand("server", commands.ServerServerCommand)
-	baseShell.RegisterCommand("agent", commands.ServerAgentCommand)
-	baseShell.Start()
+	fmt.Println("Launching Client Server on port:", port)
+	var ServerInstance *comms.Listener = comms.NewListener(port)
+	var ServerChannel chan struct{} = make(chan struct{})
+	ServerInstance.Start(ServerChannel)
 }

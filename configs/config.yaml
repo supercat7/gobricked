@@ -1,8 +1,6 @@
 Teamserver:
-  Host: "0.0.0.0"
   Port: 9090
-  Build:
-    Compiler64: "/usr/bin/x86_64-w64-mingw32-gcc"
-    Compiler86: "/usr/bin/i686-w64-mingw32-gcc"
-    Nasm: "/usr/bin/nasm"
+Operators:
+  users:
+    spider: "pass"
 
