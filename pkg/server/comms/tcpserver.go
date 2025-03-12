@@ -9,7 +9,7 @@ import (
 
 var AGENT_SOCK_LIST []net.Conn
 
-type TCPServer struct {
+type Listener struct {
 	Port     string
 	Listener net.Listener
 	Connec   net.Conn
@@ -17,16 +17,16 @@ type TCPServer struct {
 	mu       sync.Mutex
 }
 
-var SERVERINSTANCE *TCPServer = NewTCPServer("9090")
+var SERVERINSTANCE *Listener = NewListener("9090")
 var SERVERCHANNEL chan struct{} = make(chan struct{})
 
-func NewTCPServer(port string) *TCPServer {
-	return &TCPServer{
+func NewListener(port string) *Listener {
+	return &Listener{
 		Port: port,
 	}
 }
 
-func (t *TCPServer) Start(quit chan struct{}) {
+func (t *Listener) Start(quit chan struct{}) {
 	t.mu.Lock()
 
 	if t.Running {
@@ -64,14 +64,14 @@ func (t *TCPServer) Start(quit chan struct{}) {
 	}
 }
 
-func StopAllAgentComms() {
+func stopAllAgentComms() {
 	for i := 0; i < len(AGENT_SOCK_LIST); i++ {
 		fmt.Println("Closed connection to:", AGENT_SOCK_LIST[i].RemoteAddr())
 		AGENT_SOCK_LIST[i].Close()
 	}
 }
 
-func (t *TCPServer) Stop(quit chan struct{}) {
+func (t *Listener) Stop(quit chan struct{}) {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
@@ -85,7 +85,7 @@ func (t *TCPServer) Stop(quit chan struct{}) {
 	if t.Listener != nil {
 		t.Running = false
 		fmt.Println("\nSending shutdown signal to all agents...")
-		StopAllAgentComms()
+		stopAllAgentComms()
 		fmt.Println("Closed server on port:", t.Port)
 	} else {
 		fmt.Println("Server is not running on port:", t.Port)

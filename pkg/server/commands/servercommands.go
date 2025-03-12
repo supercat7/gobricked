@@ -6,7 +6,6 @@ import (
 	"gobricked/pkg/server/comms"
 	"gobricked/pkg/server/shell"
 	"gobricked/pkg/server/stats"
-	"gobricked/pkg/server/util"
 	"strconv"
 )
 
@@ -28,10 +27,10 @@ func ServerServerCommand(args []string) {
 		} else if args[0] == "list" {
 
 		} else {
-			util.CommandNotFoundErr(args[0])
+			fmt.Println("Err: Command not found: ", args[0])
 		}
 	} else {
-		util.CommandNoArgumentErr()
+		fmt.Println("No arguments found, use help <command>")
 	}
 }
 
@@ -49,14 +48,14 @@ func ServerAgentCommand(args []string) {
 				agentShell.RegisterCommand("exit", AgentExitCommand)
 				agentShell.Start()
 			} else {
-				util.CommandNoArgumentErr()
+				fmt.Println("No arguments found, use help <command>")
 			}
 		} else if args[0] == "list" {
 			// list agents
 		} else {
-			util.CommandNotFoundErr(args[0])
+			fmt.Println("Err: Command not found: ", args[0])
 		}
 	} else {
-		util.CommandNoArgumentErr()
+		fmt.Println("No arguments found, use help <command>")
 	}
 }
