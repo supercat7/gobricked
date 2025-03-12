@@ -17,10 +17,15 @@ type Listener struct {
 	mu       sync.Mutex
 }
 
-var SERVERINSTANCE *Listener = NewListener("9090")
+var SERVERINSTANCE *Listener = NewTCPListener("9090")
 var SERVERCHANNEL chan struct{} = make(chan struct{})
 
-func NewListener(port string) *Listener {
+type Server interface {
+	Start()
+	Stop()
+}
+
+func NewTCPListener(port string) *Listener {
 	return &Listener{
 		Port: port,
 	}
