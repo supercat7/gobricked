@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"gobricked/pkg/comms"
-	"gobricked/pkg/stats"
 	"gobricked/pkg/util"
 	"os"
 )
@@ -21,7 +20,7 @@ func main() {
 	}
 
 	fmt.Println("Initalizing Server statistics and data...")
-	stats.UpTimeInit()
+	util.UpTimeInit()
 
 	fmt.Println("Loading server configurations...")
 	config, err := util.LoadServerConfig(configPath)

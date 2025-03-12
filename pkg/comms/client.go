@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+var AUTHENTICATED bool = false
+
 func authClient(cli net.Conn, userPass map[string]string) {
 	var input = make([]byte, 1024)
 	n, err := cli.Read(input)
