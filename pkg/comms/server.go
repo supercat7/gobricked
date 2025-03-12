@@ -58,7 +58,7 @@ func (t *Listener) Start(quit chan struct{}, config util.ServerConfig) {
 			}
 			fmt.Printf("\nConnection received from: %s\n\r", t.Connec.RemoteAddr())
 			fmt.Println("Attempting to authenticate operator...")
-			authClient(t.Connec, util.GetOperators(config))
+			go authClient(t.Connec, util.GetOperators(config))
 		}
 	}
 }

@@ -30,7 +30,7 @@ func main() {
 	}
 	var port string = util.GetServerPort(config)
 
-	fmt.Println("Launching Client Server on port:", port)
+	fmt.Println("Launching Operator Server on port:", port)
 	var ServerInstance *comms.Listener = comms.NewListener(port)
 	var ServerChannel chan struct{} = make(chan struct{})
 	ServerInstance.Start(ServerChannel, config)
