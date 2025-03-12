@@ -33,5 +33,5 @@ func main() {
 	fmt.Println("Launching Client Server on port:", port)
 	var ServerInstance *comms.Listener = comms.NewListener(port)
 	var ServerChannel chan struct{} = make(chan struct{})
-	ServerInstance.Start(ServerChannel)
+	ServerInstance.Start(ServerChannel, config)
 }

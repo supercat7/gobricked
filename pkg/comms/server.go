@@ -2,6 +2,7 @@ package comms
 
 import (
 	"fmt"
+	"gobricked/pkg/util"
 	"net"
 	"sync"
 )
@@ -25,7 +26,7 @@ func NewListener(port string) *Listener {
 	}
 }
 
-func (t *Listener) Start(quit chan struct{}) {
+func (t *Listener) Start(quit chan struct{}, config util.ServerConfig) {
 	t.mu.Lock()
 
 	if t.Running {
@@ -53,11 +54,11 @@ func (t *Listener) Start(quit chan struct{}) {
 		default:
 			t.Connec, err = t.Listener.Accept()
 			if err != nil {
-				fmt.Printf("\nErr: Failed to accept client connection: %v\n", err)
+				fmt.Printf("\nErr: Failed to accept operator connection: %v\n", err)
 			}
 			fmt.Printf("\nConnection received from: %s\n\r", t.Connec.RemoteAddr())
-			fmt.Println("Attempting to authenticate client...")
-			go authClient(t.Connec)
+			fmt.Println("Attempting to authenticate operator...")
+			authClient(t.Connec, util.GetOperators(config))
 		}
 	}
 }
