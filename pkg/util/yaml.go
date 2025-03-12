@@ -11,7 +11,7 @@ type ServerConfig struct {
 		Port string `yaml:"port"`
 	}
 	Operators struct {
-		users map[string]string `yaml:"users"`
+		Users map[string]string `yaml:"users"`
 	}
 }
 
@@ -26,12 +26,11 @@ func LoadServerConfig(configPath string) (ServerConfig, error) {
 	if err != nil {
 		return config, err
 	}
-
 	return config, err
 }
 
 func GetOperators(config ServerConfig) map[string]string {
-	return config.Operators.users
+	return config.Operators.Users
 }
 func GetServerPort(config ServerConfig) string {
 	return config.Teamserver.Port

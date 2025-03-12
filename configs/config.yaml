@@ -1,6 +1,6 @@
-Teamserver:
-  Port: 9090
-Operators:
+teamserver:
+  port: 9090
+operators:
   users:
     spider: "pass"
 

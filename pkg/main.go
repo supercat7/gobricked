@@ -28,7 +28,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(":", config)
 	var port string = util.GetServerPort(config)
 
 	fmt.Println("Launching Client Server on port:", port)

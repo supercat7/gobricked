@@ -42,7 +42,7 @@ func (t *Listener) Start(quit chan struct{}) {
 		return
 	}
 	t.Running = true
-
+	fmt.Println("Waiting for connections from operators...")
 	t.mu.Unlock()
 	for {
 		select {
@@ -62,13 +62,6 @@ func (t *Listener) Start(quit chan struct{}) {
 	}
 }
 
-// func stopAllAgentComms() {
-// 	for i := 0; i < len(AGENT_SOCK_LIST); i++ {
-// 		fmt.Println("Closed connection to:", AGENT_SOCK_LIST[i].RemoteAddr())
-// 		AGENT_SOCK_LIST[i].Close()
-// 	}
-// }
-
 func (t *Listener) Stop(quit chan struct{}) {
 	t.mu.Lock()
 	defer t.mu.Unlock()
@@ -82,7 +75,6 @@ func (t *Listener) Stop(quit chan struct{}) {
 
 	if t.Listener != nil {
 		t.Running = false
-		//stopAllAgentComms()
 		fmt.Println("Closed server on port:", t.Port)
 	} else {
 		fmt.Println("Server is not running on port:", t.Port)

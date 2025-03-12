@@ -40,7 +40,8 @@ func (s *Shell) Start() {
 		if len(inputArr) > 0 {
 			cmd = inputArr[0]
 			args := inputArr[1:]
-			if cmd != "auth" || cmd != "help" || cmd != "exit" {
+
+			if cmd != "auth" && cmd != "help" && cmd != "exit" {
 				if comms.AUTHENTICATED == false {
 					fmt.Println("You must first connect and authenticate to a server")
 					continue
