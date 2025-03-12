@@ -4,6 +4,8 @@ Gobricked is a Command and Control server and a modular post exploitation framew
 - Golang
 - C
 # About
-Version: 0.0
+- Version: 0.0
+- UNDER CONSTRUCTION
 # Installation
 # Quick Usage
+![screenshot](assets/img/gobricked_first.png)
