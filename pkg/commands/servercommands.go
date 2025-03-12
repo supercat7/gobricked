@@ -2,10 +2,10 @@ package commands
 
 import (
 	"fmt"
-	"gobricked/pkg/server/art"
-	"gobricked/pkg/server/comms"
-	"gobricked/pkg/server/shell"
-	"gobricked/pkg/server/stats"
+	"gobricked/pkg/art"
+	"gobricked/pkg/comms"
+	"gobricked/pkg/shell"
+	"gobricked/pkg/stats"
 	"strconv"
 )
 

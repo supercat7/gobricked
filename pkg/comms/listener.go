@@ -2,7 +2,7 @@ package comms
 
 import (
 	"fmt"
-	"gobricked/pkg/server/art"
+	"gobricked/pkg/art"
 	"net"
 	"sync"
 )
