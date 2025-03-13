@@ -7,12 +7,13 @@ import (
 	"sync"
 )
 
-type Listener struct {
-	Port     string
-	Listener net.Listener
-	Connec   net.Conn
-	Running  bool
-	mu       sync.Mutex
+type OperatorServer struct {
+	Port           string
+	OperatorServer net.Listener
+	Connec         net.Conn
+	Running        bool
+	mu             sync.Mutex
+	config         util.ServerConfig
 }
 
 type Server interface {
@@ -20,13 +21,13 @@ type Server interface {
 	Stop()
 }
 
-func NewListener(port string) *Listener {
-	return &Listener{
+func NewOperatorServer(port string, config util.ServerConfig) *OperatorServer {
+	return &OperatorServer{
 		Port: port,
 	}
 }
 
-func (t *Listener) Start(quit chan struct{}, config util.ServerConfig) {
+func (t *OperatorServer) Start(quit chan struct{}) {
 	t.mu.Lock()
 
 	if t.Running {
@@ -36,7 +37,7 @@ func (t *Listener) Start(quit chan struct{}, config util.ServerConfig) {
 	}
 
 	var err error
-	t.Listener, err = net.Listen("tcp", ":"+t.Port)
+	t.OperatorServer, err = net.Listen("tcp", ":"+t.Port)
 	if err != nil {
 		fmt.Printf("\nErr: Failed to bind server to port: %v\n", err)
 		t.mu.Unlock()
@@ -48,22 +49,22 @@ func (t *Listener) Start(quit chan struct{}, config util.ServerConfig) {
 	for {
 		select {
 		case <-quit:
-			fmt.Println("Shutting Listener...")
-			t.Listener.Close()
+			fmt.Println("Shutting OperatorServer...")
+			t.OperatorServer.Close()
 			return
 		default:
-			t.Connec, err = t.Listener.Accept()
+			t.Connec, err = t.OperatorServer.Accept()
 			if err != nil {
 				fmt.Printf("\nErr: Failed to accept operator connection: %v\n", err)
 			}
 			fmt.Printf("\nConnection received from: %s\n\r", t.Connec.RemoteAddr())
 			fmt.Println("Attempting to authenticate operator...")
-			go authClient(t.Connec, util.GetOperators(config))
+			go authClient(t.Connec, t.config.Teamserver.Password)
 		}
 	}
 }
 
-func (t *Listener) Stop(quit chan struct{}) {
+func (t *OperatorServer) Stop(quit chan struct{}) {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
@@ -74,7 +75,7 @@ func (t *Listener) Stop(quit chan struct{}) {
 	}
 	close(quit)
 
-	if t.Listener != nil {
+	if t.OperatorServer != nil {
 		t.Running = false
 		fmt.Println("Closed server on port:", t.Port)
 	} else {

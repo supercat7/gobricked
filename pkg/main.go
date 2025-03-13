@@ -27,10 +27,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	var port string = util.GetServerPort(config)
+	var port string = config.Teamserver.Port
 
 	fmt.Println("Launching Operator Server on port:", port)
-	var ServerInstance *comms.Listener = comms.NewListener(port)
+	var ServerInstance *comms.OperatorServer = comms.NewOperatorServer(port, config)
 	var ServerChannel chan struct{} = make(chan struct{})
-	ServerInstance.Start(ServerChannel, config)
+	ServerInstance.Start(ServerChannel)
 }

@@ -8,10 +8,8 @@ import (
 
 type ServerConfig struct {
 	Teamserver struct {
-		Port string `yaml:"port"`
-	}
-	Operators struct {
-		Users map[string]string `yaml:"users"`
+		Port     string `yaml:"port"`
+		Password string `yaml:password`
 	}
 }
 
@@ -27,11 +25,4 @@ func LoadServerConfig(configPath string) (ServerConfig, error) {
 		return config, err
 	}
 	return config, err
-}
-
-func GetOperators(config ServerConfig) map[string]string {
-	return config.Operators.Users
-}
-func GetServerPort(config ServerConfig) string {
-	return config.Teamserver.Port
 }
