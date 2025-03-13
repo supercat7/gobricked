@@ -10,7 +10,9 @@ import (
 
 func main() {
 	var configPath string
+	var debug bool
 	flag.StringVar(&configPath, "config", "", "Server Yaml config path (required)")
+	flag.Bool("debug", debug, "Server debugging mode activation")
 	flag.Parse()
 
 	if configPath == "" {

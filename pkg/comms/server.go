@@ -8,12 +8,12 @@ import (
 )
 
 type OperatorServer struct {
-	Port           string
-	OperatorServer net.Listener
-	Connec         net.Conn
-	Running        bool
-	mu             sync.Mutex
-	config         util.ServerConfig
+	Port    string
+	Server  net.Listener
+	Connec  net.Conn
+	Running bool
+	mu      sync.Mutex
+	config  util.ServerConfig
 }
 
 type Server interface {
@@ -21,9 +21,10 @@ type Server interface {
 	Stop()
 }
 
-func NewOperatorServer(port string, config util.ServerConfig) *OperatorServer {
+func NewOperatorServer(port string, c util.ServerConfig) *OperatorServer {
 	return &OperatorServer{
-		Port: port,
+		Port:   port,
+		config: c,
 	}
 }
 
@@ -37,7 +38,7 @@ func (t *OperatorServer) Start(quit chan struct{}) {
 	}
 
 	var err error
-	t.OperatorServer, err = net.Listen("tcp", ":"+t.Port)
+	t.Server, err = net.Listen("tcp", ":"+t.Port)
 	if err != nil {
 		fmt.Printf("\nErr: Failed to bind server to port: %v\n", err)
 		t.mu.Unlock()
@@ -50,10 +51,10 @@ func (t *OperatorServer) Start(quit chan struct{}) {
 		select {
 		case <-quit:
 			fmt.Println("Shutting OperatorServer...")
-			t.OperatorServer.Close()
+			t.Server.Close()
 			return
 		default:
-			t.Connec, err = t.OperatorServer.Accept()
+			t.Connec, err = t.Server.Accept()
 			if err != nil {
 				fmt.Printf("\nErr: Failed to accept operator connection: %v\n", err)
 			}
@@ -75,7 +76,7 @@ func (t *OperatorServer) Stop(quit chan struct{}) {
 	}
 	close(quit)
 
-	if t.OperatorServer != nil {
+	if t.Server != nil {
 		t.Running = false
 		fmt.Println("Closed server on port:", t.Port)
 	} else {

@@ -9,7 +9,7 @@ import (
 type ServerConfig struct {
 	Teamserver struct {
 		Port     string `yaml:"port"`
-		Password string `yaml:password`
+		Password string `yaml:"password"`
 	}
 }
 

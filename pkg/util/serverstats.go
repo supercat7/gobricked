@@ -1,6 +1,7 @@
 package util
 
 import (
+	"gobricked/pkg/global"
 	"time"
 )
 
@@ -8,17 +9,15 @@ type ServerStats struct {
 	uptime time.Duration
 }
 
-var startTime time.Time
-
 func UpTimeInit() {
-	startTime = time.Now()
+	global.StartTime = time.Now()
 }
 
 func UpTime() time.Duration {
-	if startTime.IsZero() {
-		startTime = time.Now()
+	if global.StartTime.IsZero() {
+		global.StartTime = time.Now()
 	}
-	return time.Since(startTime)
+	return time.Since(global.StartTime)
 }
 
 func GetServerStats() ServerStats {
