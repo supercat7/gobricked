@@ -8,4 +8,3 @@ Gobricked is a Command and Control server and a modular post exploitation framew
 - UNDER CONSTRUCTION
 # Installation
 # Quick Usage
-![screenshot](assets/img/gobricked_first.png)
